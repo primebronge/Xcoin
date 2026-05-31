@@ -61,8 +61,10 @@
     .wrap {
       width: 100%;
       min-height: 100vh;
-      display: grid;
-      place-items: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       padding: 20px;
       position: relative;
     }
@@ -424,6 +426,24 @@
   </div>
 
   <main class="wrap" id="main-content" style="display: none;">
+    
+    <!-- ==========================================
+         ADSTERRA 468x60 BANNER (Top of the Card)
+         ========================================== -->
+    <div style="width: 100%; display: flex; justify-content: center; margin-bottom: 20px; z-index: 10;">
+      <script type="text/javascript">
+        atOptions = {
+          'key' : '70df09801b9d7f000acf25a74fe56882',
+          'format' : 'iframe',
+          'height' : 60,
+          'width' : 468,
+          'params' : {}
+        };
+      </script>
+      <script type="text/javascript" src="https://consumptionbackwardsentiments.com/70df09801b9d7f000acf25a74fe56882/invoke.js"></script>
+    </div>
+
+    <!-- MAIN CARD -->
     <section class="card">
       <div class="hero">
         <div class="dojo-badge">X Coin</div>
@@ -498,6 +518,15 @@
         DEVELOPED BY @PRIMEBRONGE
       </div>
     </section>
+
+    <!-- ==========================================
+         ADSTERRA NATIVE BANNER (Bottom of the Card)
+         ========================================== -->
+    <div style="width: 100%; max-width: 600px; margin-top: 30px; display: flex; justify-content: center; z-index: 10;">
+      <script async="async" data-cfasync="false" src="https://consumptionbackwardsentiments.com/4b01ad90dd94d5585c5ee35ea31c1600/invoke.js"></script>
+      <div id="container-4b01ad90dd94d5585c5ee35ea31c1600"></div>
+    </div>
+
   </main>
 
   <script>
@@ -782,7 +811,7 @@
       }
 
       securityLoader.style.display = "none";
-      mainContent.style.display = "grid";
+      mainContent.style.display = "flex";
 
       initFirebase();
       for (let i = 0; i < TOTAL_STEPS; i++) {
