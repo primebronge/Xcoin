@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>X Coin Redeem Code</title>
+
+  <!-- Google Fonts for Gaming Vibe -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #07070a;
+      --panel-bg: rgba(13, 13, 18, 0.85);
+      --panel-border: rgba(0, 255, 204, 0.15);
+      --primary: #00ffcc; /* Cyber Cyan */
+      --secondary: #9d00ff; /* Neon Purple */
+      --text-main: #f0f0f5;
+      --text-muted: #8b8b9e;
+      --success: #00ff88;
+      --danger: #ff0055;
+      --font-head: 'Orbitron', sans-serif;
+      --font-body: 'Rajdhani', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      color: var(--text-main);
+      background-color: var(--bg-dark);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      display: grid;
+      place-items: center;
+    }
+
+    /* Cyberpunk Grid Background */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background: 
+        linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      perspective: 1000px;
+      transform-origin: center bottom;
+      mask-image: linear-gradient(to bottom, transparent 10%, black 80%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 10%, black 80%);
+    }
+
+    .wrap {
+      width: 100%;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 500px;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      box-shadow: 0 0 30px rgba(0, 255, 204, 0.05), inset 0 0 20px rgba(157, 0, 255, 0.05);
+      border-radius: 12px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Cyber Glow Top Line */
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+    }
+
+    .hero {
+      padding: 35px 30px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    /* New DOJO Title Style */
+    .dojo-badge {
+      display: inline-block;
+      font-family: var(--font-head);
+      font-weight: 900;
+      font-size: 22px;
+      letter-spacing: 4px;
+      color: transparent;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      text-transform: uppercase;
+      position: relative;
+      text-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+      margin-bottom: 10px;
+    }
+
+    .dojo-badge::before, .dojo-badge::after {
+      content: "—";
+      color: var(--primary);
+      opacity: 0.5;
+      margin: 0 10px;
+    }
+
+    h1 {
+      font-family: var(--font-head);
+      font-size: 28px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 10px;
+      color: #fff;
+    }
+
+    .sub {
+      margin-top: 10px;
+      color: var(--text-muted);
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    .body-content {
+      padding: 25px 30px 30px;
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-head);
+      font-size: 14px;
+      letter-spacing: 1px;
+      color: var(--primary);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      box-shadow: 0 0 15px var(--primary);
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .step-box {
+      margin-top: 25px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-left: 4px solid #333;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+
+    .step-item.done {
+      border-left-color: var(--success);
+      background: rgba(0, 255, 136, 0.05);
+      border: 1px solid rgba(0, 255, 136, 0.1);
+      box-shadow: inset 20px 0 30px -20px rgba(0, 255, 136, 0.15);
+    }
+
+    .step-label {
+      font-family: var(--font-head);
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .step-status {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .step-item.done .step-status {
+      color: var(--success);
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    }
+
+    .actions {
+      margin-top: 25px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      font-family: var(--font-head);
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s;
+      outline: none;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .btn-primary {
+      background: rgba(0, 255, 204, 0.1);
+      color: var(--primary);
+      border: 2px solid var(--primary);
+      box-shadow: 0 0 15px rgba(0, 255, 204, 0.2), inset 0 0 10px rgba(0, 255, 204, 0.1);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary);
+      color: #000;
+      box-shadow: 0 0 25px rgba(0, 255, 204, 0.6), inset 0 0 15px rgba(0, 255, 204, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .timer-container {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--secondary);
+      border-radius: 8px;
+      text-align: center;
+      font-family: var(--font-body);
+      font-weight: 600;
+      color: var(--secondary);
+      letter-spacing: 1px;
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--primary);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .status {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-muted);
+      min-height: 22px;
+    }
+
+    .loading {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 25px;
+      font-family: var(--font-head);
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .result {
+      display: none;
+      margin-top: 25px;
+      padding: 20px;
+      background: rgba(0, 255, 136, 0.03);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .result-title {
+      font-family: var(--font-head);
+      font-size: 14px;
+      color: var(--success);
+      margin-bottom: 15px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .key-box {
+      font-family: monospace;
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff;
+      background: #000;
+      padding: 15px;
+      border-radius: 6px;
+      border: 1px solid var(--success);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+      word-break: break-all;
+      letter-spacing: 2px;
+    }
+
+    .footer {
+      padding: 0 30px 25px;
+      text-align: center;
+      font-family: var(--font-head);
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 1px;
+    }
+
+    .hidden { display: none !important; }
+
+    /* Security Overlays */
+    #security-loader, .security-error-page {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-dark);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      font-family: var(--font-head);
+    }
+    
+    .security-error-page {
+      display: none;
+      border: 5px solid var(--danger);
+      box-shadow: inset 0 0 100px rgba(255, 0, 85, 0.2);
+    }
+
+    .security-error-page h2 {
+      color: var(--danger);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 0 0 15px rgba(255, 0, 85, 0.6);
+    }
+
+    .security-error-page p {
+      font-family: var(--font-body);
+      font-size: 18px;
+      color: var(--text-main);
+      margin-top: 15px;
+      max-width: 450px;
+    }
+
+    .sec-icon {
+      font-size: 60px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 20px var(--danger));
+    }
+
+  </style>
+
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  
+  <!-- Cyber Grid Background -->
+  <div class="bg-grid"></div>
+
+  <!-- Security Checks -->
+  <div id="security-loader">
+    <div class="spinner" style="width: 45px; height: 45px; margin-bottom: 20px; border-width: 4px;"></div>
+    <h2 style="color: var(--primary); letter-spacing: 2px;">INITIALIZING...</h2>
+    <p style="color: var(--text-muted); font-family: var(--font-body); margin-top: 10px; font-size: 18px;">Checking network integrity protocols.</p>
+  </div>
+
+  <div id="geo-error" class="security-error-page">
+    <div class="sec-icon">🌍</div>
+    <h2>Access Denied</h2>
+    <p>System locked. This terminal is strictly limited to operatives within the United States.</p>
+  </div>
+
+  <div id="vpn-error" class="security-error-page">
+    <div class="sec-icon">🛡️</div>
+    <h2>Connection Blocked</h2>
+    <p>Proxy/VPN network detected. Disable your anonymizer modules and reboot the connection to proceed.</p>
+  </div>
+
+  <div id="adblock-error" class="security-error-page">
+    <div class="sec-icon">🛑</div>
+    <h2>Interference Detected</h2>
+    <p>Ad-blocking software is active. Disable shields to gain access to the terminal.</p>
+  </div>
+
+  <main class="wrap" id="main-content" style="display: none;">
+    <section class="card">
+      <div class="hero">
+        <div class="dojo-badge">X Coin</div>
+        <h1>Redeem Code</h1>
+        <p class="sub">
+          Click the "START" button, Wait on the ad page for 10 seconds, and complete all 5 steps to get your redeem code.
+        </p>
+      </div>
+
+      <div class="body-content">
+        <div class="progress-head">
+          <span>PROGRESS</span>
+          <span id="progress-text">0%</span>
+        </div>
+
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div class="step-box" id="steps-list">
+          <div class="step-item" id="s1">
+            <span class="step-label">Step 01</span>
+            <span class="step-status">Pending</span>
+          </div>
+          <div class="step-item" id="s2">
+            <span class="step-label">Step 02</span>
+            <span class="step-status">Pending</span>
+          </div>
+          <div class="step-item" id="s3">
+            <span class="step-label">Step 03</span>
+            <span class="step-status">Pending</span>
+          </div>
+          <div class="step-item" id="s4">
+            <span class="step-label">Step 04</span>
+            <span class="step-status">Pending</span>
+          </div>
+          <div class="step-item" id="s5">
+            <span class="step-label">Step 05</span>
+            <span class="step-status">Pending</span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="action-btn">
+            START
+          </button>
+        </div>
+
+        <div class="timer-container" id="timer-container">
+          <div class="spinner"></div>
+          <div>Awaiting signal confirmation...</div>
+        </div>
+
+        <div class="loading" id="loading-state">
+          <div class="spinner"></div>
+          <span>Extracting Code...</span>
+        </div>
+
+        <div class="status" id="status-text">Start Step 1.</div>
+
+        <div class="result" id="result-box">
+          <div class="result-title">Redeem Code</div>
+          <div class="key-box" id="key-display">Don’t have code :(</div>
+
+          <div class="actions" style="margin-top:20px;">
+            <button class="btn btn-primary" id="copy-btn">COPY</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        DEVELOPED BY @PRIMEBRONGE
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC2mEZBoiuUuU3e0ymHyRiwHt_xfyBvuAs",
+      authDomain: "wisc-e94c6.firebaseapp.com",
+      databaseURL: "https://wisc-e94c6-default-rtdb.firebaseio.com",
+      projectId: "wisc-e94c6",
+      storageBucket: "wisc-e94c6.appspot.com",
+      messagingSenderId: "234617788899",
+      appId: "1:234617788899:web:d9dbd42946cde8e338e8d6",
+      measurementId: "G-1Z6VFTPP63"
+    };
+
+    const STEP_LINK = "https://www.effectivecpmnetwork.com/mbdr9hwr8g?key=68723df94fc7c8be7570df8e8fc1f533";
+    const TOTAL_STEPS = 5;
+    const REQUIRED_WAIT_TIME_MS = 10000;
+
+    let currentStep = 1;
+    let db = null;
+    let keyLoaded = false;
+    
+    let isWaitingForAd = false;
+    let adOpenTime = 0;
+
+    const progressFill = document.getElementById("progress-fill");
+    const progressText = document.getElementById("progress-text");
+    const statusText = document.getElementById("status-text");
+    const loadingState = document.getElementById("loading-state");
+    const timerContainer = document.getElementById("timer-container");
+    const resultBox = document.getElementById("result-box");
+    const keyDisplay = document.getElementById("key-display");
+    const actionBtn = document.getElementById("action-btn");
+    const copyBtn = document.getElementById("copy-btn");
+    const mainContent = document.getElementById("main-content");
+    
+    const securityLoader = document.getElementById("security-loader");
+    const geoError = document.getElementById("geo-error");
+    const vpnError = document.getElementById("vpn-error");
+    const adblockError = document.getElementById("adblock-error");
+
+    const stepEls = [
+      document.getElementById("s1"),
+      document.getElementById("s2"),
+      document.getElementById("s3"),
+      document.getElementById("s4"),
+      document.getElementById("s5")
+    ];
+
+    async function isAdBlockActive() {
+      try {
+        await fetch('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js', {
+          method: 'HEAD',
+          mode: 'no-cors',
+          cache: 'no-store'
+        });
+        return false; 
+      } catch (error) {
+        return true;  
+      }
+    }
+
+    async function verifyConnectionSecurity() {
+      try {
+        const response = await fetch("https://ipwho.is/");
+        const data = await response.json();
+        
+        if (!data || data.success === false) {
+          return { passed: true };
+        }
+
+        if (data.country_code !== "US") {
+          return { passed: false, type: "GEO" };
+        }
+
+        if (data.security && (
+          data.security.proxy || 
+          data.security.tor || 
+          data.security.hosting
+        )) {
+          return { passed: false, type: "VPN" };
+        }
+
+        const deviceTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; 
+        if (deviceTimezone && !deviceTimezone.startsWith("America/") && !deviceTimezone.startsWith("Pacific/")) {
+          return { passed: false, type: "VPN" };
+        }
+
+        return { passed: true };
+      } catch (error) {
+        return { passed: true }; 
+      }
+    }
+
+    function setStatus(msg, type = "normal") {
+      statusText.textContent = msg;
+      statusText.style.color =
+        type === "good" ? "var(--success)" :
+        type === "bad" ? "var(--danger)" :
+        "var(--text-muted)";
+    }
+
+    function setProgress(stepIndex) {
+      const total = ((stepIndex - 1) / TOTAL_STEPS) * 100;
+      const pct = Math.max(0, Math.min(100, total));
+      progressFill.style.width = pct + "%";
+      progressText.textContent = Math.round(pct) + "%";
+    }
+
+    function markStep(index, done = true) {
+      const el = stepEls[index];
+      if (!el) return;
+      el.classList.toggle("done", done);
+      el.querySelector(".step-status").textContent = done ? "Verified" : "-";
+    }
+
+    function initFirebase() {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      db = firebase.database();
+    }
+
+    function openSponsorAndVerify() {
+      if (isWaitingForAd) return;
+
+      window.open(STEP_LINK, "_blank", "noopener,noreferrer");
+      
+      isWaitingForAd = true;
+      adOpenTime = Date.now();
+      
+      actionBtn.classList.add("hidden");
+      timerContainer.style.display = "block";
+      setStatus(`Loading Step ${currentStep}...`, "normal");
+    }
+
+    function handleUserReturn() {
+      if (!isWaitingForAd) return;
+
+      const timeSpentAway = Date.now() - adOpenTime;
+
+      if (timeSpentAway < REQUIRED_WAIT_TIME_MS) {
+        isWaitingForAd = false;
+        timerContainer.style.display = "none";
+        actionBtn.classList.remove("hidden");
+        setStatus(`Wait up to 10 seconds.`, "bad");
+      } else {
+        isWaitingForAd = false;
+        timerContainer.style.display = "none";
+        actionBtn.classList.remove("hidden");
+
+        markStep(currentStep - 1, true);
+
+        if (currentStep < 5) {
+          currentStep++;
+          actionBtn.textContent = `Step ${currentStep}`;
+          setProgress(currentStep);
+          setStatus(`Step ${currentStep - 1} verified.`, "good");
+        } else {
+          currentStep++;
+          setProgress(TOTAL_STEPS + 1);
+          setStatus("Decryption complete. Accessing database...", "good");
+          showKeyArea();
+          loadKeyFromFirebase();
+        }
+      }
+    }
+
+    window.addEventListener("focus", handleUserReturn);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        handleUserReturn();
+      }
+    });
+
+    function showKeyArea() {
+      document.getElementById("steps-list").classList.add("hidden");
+      actionBtn.classList.add("hidden");
+      loadingState.style.display = "flex";
+      resultBox.style.display = "none";
+    }
+
+    function loadKeyFromFirebase() {
+      try {
+        initFirebase();
+        setStatus("Establishing secure uplink...", "normal");
+
+        db.ref("Key").once("value")
+          .then((snapshot) => {
+            loadingState.style.display = "none";
+            resultBox.style.display = "block";
+
+            if (snapshot.exists() && snapshot.hasChildren()) {
+              const allKeysData = snapshot.val();
+              const keyIDs = Object.keys(allKeysData); 
+
+              const randomKeyID = keyIDs[Math.floor(Math.random() * keyIDs.length)];
+              const selectedKeyString = allKeysData[randomKeyID].key;
+
+              keyDisplay.textContent = selectedKeyString;
+              keyLoaded = true;
+              setStatus("Data extracted successfully.", "good");
+
+              db.ref("Key/" + randomKeyID).remove()
+                .then(() => {
+                  console.log(`Node ${randomKeyID} erased.`);
+                })
+                .catch((error) => {
+                  console.error("Cleanup failed:", error);
+                });
+
+            } else {
+              keyDisplay.textContent = "DATABASE EMPTY";
+              setStatus("No keys detected in mainframe.", "bad");
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            loadingState.style.display = "none";
+            resultBox.style.display = "block";
+            keyDisplay.textContent = "UPLINK ERROR";
+            setStatus("Server connection failed.", "bad");
+          });
+      } catch (err) {
+        console.error(err);
+        loadingState.style.display = "none";
+        resultBox.style.display = "block";
+        keyDisplay.textContent = "SYSTEM ERROR";
+        setStatus("Core failure.", "bad");
+      }
+    }
+
+    async function copyKey() {
+      const text = keyDisplay.textContent.trim();
+      if (!text || text === "NO DATA" || text === "UPLINK ERROR" || text === "DATABASE EMPTY" || text === "SYSTEM ERROR") {
+        setStatus("Invalid data block.", "bad");
+        return;
+      }
+
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const textarea = document.createElement("textarea");
+          textarea.value = text;
+          textarea.style.position = "fixed";
+          textarea.style.left = "-9999px";
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textarea);
+        }
+        setStatus("Code copied to clipboard.", "good");
+      } catch (error) {
+        console.error(error);
+        setStatus("Copy execution failed.", "bad");
+      }
+    }
+
+    actionBtn.addEventListener("click", openSponsorAndVerify);
+    copyBtn.addEventListener("click", copyKey);
+
+    window.addEventListener("load", async () => {
+      
+      const adBlockActive = await isAdBlockActive();
+      if (adBlockActive) {
+        securityLoader.style.display = "none";
+        adblockError.style.display = "flex";
+        return; 
+      }
+
+      const securityCheck = await verifyConnectionSecurity();
+      if (!securityCheck.passed) {
+        securityLoader.style.display = "none";
+        if (securityCheck.type === "GEO") {
+          geoError.style.display = "flex";
+        } else if (securityCheck.type === "VPN") {
+          vpnError.style.display = "flex";
+        }
+        return;
+      }
+
+      securityLoader.style.display = "none";
+      mainContent.style.display = "grid";
+
+      initFirebase();
+      for (let i = 0; i < TOTAL_STEPS; i++) {
+        markStep(i, false);
+      }
+
+      actionBtn.textContent = "START";
+      setProgress(1);
+      setStatus("Start Step 1.", "normal");
+      resultBox.style.display = "none";
+      loadingState.style.display = "none";
+      timerContainer.style.display = "none";
+    });
+  </script>
+</body>
+  </html>
