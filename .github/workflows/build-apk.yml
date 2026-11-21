@@ -1,0 +1,82 @@
+name: Build Ludo King APK
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # Firebase SDK app er bhitore rakhi, jate offline e-o cholte pare (na pele CDN use hoy)
+      - name: Download Firebase SDK
+        run: |
+          mkdir -p www/lib
+          for f in firebase-app-compat.js firebase-database-compat.js; do
+            curl -fsSL "https://www.gstatic.com/firebasejs/10.12.2/$f" -o "www/lib/$f" || rm -f "www/lib/$f"
+          done
+          ls -la www/lib
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Add Android platform
+        run: npx cap add android
+
+      - name: Apply icon, name, splash, portrait, fullscreen
+        run: python3 scripts/prepare_android.py
+        env:
+          APP_VERSION_CODE: ${{ github.run_number }}
+
+      - name: Sync web files
+        run: npx cap sync android
+
+      # Same keystore => notun APK purano app er upor update hoye install hoy
+      - name: Use fixed signing key
+        run: |
+          mkdir -p ~/.android
+          cp keystore/debug.keystore ~/.android/debug.keystore
+
+      - name: Build APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Rename APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk Ludo-King.apk
+
+      - name: Upload APK (Actions artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ludo-King-APK
+          path: Ludo-King.apk
+
+      - name: Publish APK to Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Ludo King v1.0.${{ github.run_number }}
+          files: Ludo-King.apk
