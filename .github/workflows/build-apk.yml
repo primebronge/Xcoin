@@ -27,8 +27,12 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      # Runner e Android SDK age thekei ache; shudhu license accept kore nei
+      - name: Accept Android SDK licenses
+        run: |
+          SDK="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          echo "Android SDK: $SDK"
+          yes | "$SDK/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
 
       # Firebase SDK app er bhitore rakhi, jate offline e-o cholte pare (na pele CDN use hoy)
       - name: Download Firebase SDK
