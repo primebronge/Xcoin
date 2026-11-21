@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+<title>Ludo King</title><link rel="stylesheet" href="css/style.css"></head>
+<body data-s="splash">
+<div id="bgl"></div>
+<svg width="0" height="0" style="position:absolute"><defs>
+<linearGradient id="gd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3a0"/><stop offset="1" stop-color="#e0a000"/></linearGradient>
+<linearGradient id="pg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#dde2ea"/><stop offset="1" stop-color="#8f99a8"/></linearGradient>
+<symbol id="crown" viewBox="0 0 60 44"><path d="M4 12l10 10 8-16 8 16 8-16 8 16 10-10-5 28H9z" fill="url(#gd)" stroke="#8a5a00" stroke-width="2.5" stroke-linejoin="round"/><g fill="#fff3a0" stroke="#8a5a00" stroke-width="1.5"><circle cx="4" cy="11" r="3.5"/><circle cx="22" cy="6" r="3.5"/><circle cx="38" cy="6" r="3.5"/><circle cx="56" cy="11" r="3.5"/></g><rect x="9" y="36" width="42" height="5" rx="2" fill="#c98a00"/></symbol>
+<symbol id="pin" viewBox="0 0 40 56"><ellipse cx="20" cy="49.5" rx="14" ry="5.5" fill="currentColor" stroke="#7a1a1a" stroke-width="1.5"/><ellipse cx="20" cy="49" rx="8" ry="2.6" fill="#fff" opacity=".35"/><path d="M20 2C11 2 5 9 5 17c0 11 15 30 15 30s15-19 15-30C35 9 29 2 20 2z" fill="url(#pg)" stroke="#6b7280" stroke-width=".9"/><circle cx="20" cy="17" r="9" fill="currentColor" stroke="#0004"/><ellipse cx="17" cy="13.5" rx="3.6" ry="2.4" fill="#fff" opacity=".7"/></symbol>
+<symbol id="logo" viewBox="0 0 300 210">
+<g class="cr"><path d="M34 62l-9-34 22 15 13-29 13 29 22-15-9 34z" fill="url(#gd)" stroke="#8a5a00" stroke-width="2.5"/><rect x="33" y="62" width="72" height="9" rx="4" fill="url(#gd)" stroke="#8a5a00" stroke-width="2"/></g>
+<text x="292" y="62" text-anchor="end" font-family="Georgia,serif" font-weight="700" font-size="34" fill="url(#gd)" stroke="#6b4300" stroke-width=".8">KING</text>
+<g class="lt" font-family="'Arial Black',Impact,sans-serif" font-size="42" font-weight="900" text-anchor="middle" stroke-width="5" fill="#fff">
+<circle cx="52" cy="102" r="30" stroke="#1e9bf0"/><text x="52" y="117" stroke="none" fill="#1e9bf0">L</text>
+<circle cx="118" cy="102" r="30" stroke="#e8202a"/><text x="118" y="117" stroke="none" fill="#e8202a">U</text>
+<circle cx="184" cy="102" r="30" stroke="#12a83a"/><text x="184" y="117" stroke="none" fill="#12a83a">D</text>
+<circle cx="250" cy="102" r="30" stroke="#ffc21f"/><text x="250" y="117" stroke="none" fill="#e0a000">O</text></g>
+<polygon points="92,152 150,152 150,168 76,168" fill="#e8202a"/><polygon points="160,152 218,152 234,168 160,168" fill="#12a83a"/><polygon points="74,172 150,172 150,196 54,196" fill="#1e9bf0"/><polygon points="160,172 236,172 256,196 160,196" fill="#ffc21f"/>
+<g class="dc"><g transform="translate(131 118) rotate(-10 19 19)"><rect width="38" height="38" rx="9" fill="#fff" stroke="#b9bec9" stroke-width="2"/><g fill="#111"><circle cx="9" cy="9" r="3.6"/><circle cx="29" cy="9" r="3.6"/><circle cx="19" cy="19" r="3.6"/><circle cx="9" cy="29" r="3.6"/><circle cx="29" cy="29" r="3.6"/></g></g></g>
+<use class="pp" href="#pin" x="2" y="122" width="48" height="66" style="color:#1e9bf0"/><use href="#pin" x="250" y="124" width="48" height="66" style="color:#ffc21f"/><use href="#pin" x="62" y="114" width="26" height="36" style="color:#e8202a"/><use href="#pin" x="212" y="114" width="26" height="36" style="color:#12a83a"/>
+</symbol></defs></svg>
+<div id="stage">
+
+<div id="splash" class="scr on"><svg class="logo big"><use href="#logo"/></svg><div class="ld"><i></i></div><p id="tp" class="tp" data-i="tapstart"></p><div class="pw">powered by PRIME BRONGE</div></div>
+
+<div id="home" class="scr">
+ <div id="tb"><div class="av">👤<b>1</b></div><button class="ic" onclick="sc('set')">⚙</button><span class="ic">✉</span><div class="cur">💎<span>50</span><u>+</u></div><div class="cur">🪙<span id="co">2,250</span><u>+</u></div><span class="ic">🛒</span></div>
+ <div class="sd l"><div class="mi">🎁<small>STARTER<br>PACK</small></div><div class="mi">👑</div><div class="mi lv">LIVE</div></div>
+ <div class="sd r"><div class="mi">💰</div><div class="mi">🎁<small>FREE</small></div><div class="mi">🎯</div><div class="mi">🧩</div><div class="mi">❓</div></div>
+ <div class="hm">
+ <svg class="logo" id="lg" viewBox="0 0 300 210"></svg>
+ <div class="hr">
+  <div class="hw"><div class="hb"><em>PLAY NOW</em><svg class="gl ico" viewBox="0 0 60 60"><defs><clipPath id="gc"><circle cx="30" cy="30" r="27"/></clipPath><radialGradient id="gs" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient></defs><circle cx="30" cy="30" r="27" fill="#16228a"/><g clip-path="url(#gc)"><g class="cn" fill="#3ddc4a"><path id="ct1" d="M6 16q8-8 16-2t-2 12-12 4zM30 28q10-4 14 4t-4 14-10-6zM44 8q8-2 10 6t-8 4z"/><use href="#ct1" x="60"/></g></g><circle cx="30" cy="30" r="27" fill="url(#gs)" stroke="#0a1450" stroke-width="2"/></svg><b>ONLINE</b></div><small>● Players: 157,240</small></div>
+  <div class="hw"><div class="hb fn" onclick="openT()"><span class="ico sw2">🗡️</span><b>TEAM UP</b></div><small>● Players: 2,760</small></div>
+  <div class="hw"><div class="hb fn" onclick="sc('onl')"><span class="ico ht">❤️</span><span class="mic">🎙</span><b>FRIENDS</b></div><small>● Players: 15,713</small></div></div>
+ <div class="hr two"><div class="hb">📱<b>COMPUTER</b></div><div class="hb fn" onclick="openL()">🧑‍🤝‍🧑<b>PASS N PLAY</b></div></div>
+ <div class="hr r3"><div class="rb">🎲</div><div class="tn">TOURNAMENT</div><div class="rb">🐍</div></div>
+ <div class="cl"><span class="ss">SEASON<b>28</b></span><span class="cb">CLAIM</span></div>
+ </div>
+ <div class="fr">FREE<br>🎬×5</div><div class="sp">🎡</div>
+ <div class="pw">powered by PRIME BRONGE</div>
+ <nav id="nv"><div class="on">🏠<b>HOME</b></div><div>📅<b>EVENT</b></div><div><span class="mk">🎤</span><b>ADDA</b></div><div>🎲<b>INVENTORY</b></div><div>💬<b>SOCIAL</b></div></nav>
+</div>
+
+<div id="lset" class="scr sub"><div class="pnl"><h2 class="ti" data-i="cname"></h2><div id="lrows"></div>
+ <div class="nbs"><button class="nb" data-n="2" onclick="lN(2)">2P</button><button class="nb" data-n="3" onclick="lN(3)">3P</button><button class="nb" data-n="4" onclick="lN(4)">4P</button><button class="nb dim">5P</button><button class="nb dim">6P</button></div></div>
+ <button class="gb" onclick="playLocal(0)"><span data-i="play"></span></button><button class="gb" onclick="playLocal(1)"><span data-i="play"></span><small data-i="oto"></small></button>
+ <button class="bk" onclick="sc('home')">↩</button></div>
+
+<div id="tset" class="scr sub"><div class="pnl"><h2 class="ti" data-i="cname"></h2><div id="trows"></div>
+ <label class="fk"><input type="checkbox" id="fk"><span data-i="fk"></span></label></div>
+ <button class="gb" onclick="playTeam(0)"><span data-i="play"></span></button><button class="gb" onclick="playTeam(1)"><span data-i="play"></span><small data-i="oto"></small></button>
+ <button class="bk" onclick="sc('home')">↩</button></div>
+
+<div id="onl" class="scr sub"><div class="pnl">
+ <div id="ob"><button class="gb" style="width:100%;margin-bottom:12px" onclick="oSub('cr')"><span data-i="create"></span></button><button class="gb" style="width:100%" onclick="oSub('jn')"><span data-i="join"></span></button></div>
+ <div class="pn" id="cr"><h2 class="ti" data-i="create"></h2><input class="fi" id="nm1" data-p="yname" maxlength="12"><select class="fi" id="pn" style="margin:8px 0"><option value="2" data-i="p2"></option><option value="3" data-i="p3"></option><option value="4" data-i="p4" selected></option></select><label class="fk" style="font-size:20px"><input type="checkbox" id="tm"><span data-i="tmo"></span></label><button class="gb" style="width:100%;margin-top:10px" onclick="create()"><span data-i="mk"></span></button></div>
+ <div class="pn" id="jn"><h2 class="ti" data-i="join"></h2><input class="fi" id="nm2" data-p="yname" maxlength="12"><input class="fi" id="rid" data-p="rcode" maxlength="5" style="margin:8px 0;text-transform:uppercase"><button class="gb" style="width:100%" onclick="join()"><span data-i="jn"></span></button></div>
+ <div id="err"></div></div>
+ <button class="bk" onclick="oBack()">↩</button></div>
+
+<div id="lobby" class="scr sub"><div class="pnl"><h2 class="ti"><span data-i="rc"></span> <b id="lc" style="letter-spacing:3px"></b></h2><div id="pls"></div>
+ <button class="gb" style="width:100%" id="go" onclick="start()"><span data-i="go"></span></button><div id="wt"></div></div>
+ <button class="bk" onclick="exitG()">↩</button></div>
+
+<div id="set" class="scr sub"><div class="pnl"><h2 class="ti" data-i="set"></h2>
+ <div class="lp"><b data-i="lang"></b><button class="nb" style="width:auto;padding:0 12px;height:44px;font-size:20px" id="lbn" onclick="setLang('bn')">বাংলা</button><button class="nb" style="width:auto;padding:0 12px;height:44px;font-size:20px" id="len" onclick="setLang('en')">English</button></div>
+ <div class="lp"><b data-i="snd"></b><button class="nb" style="width:auto;padding:0 16px;height:44px;font-size:20px" id="sb" onclick="mute()"></button></div></div>
+ <button class="bk" onclick="sc('home')">↩</button></div>
+
+<div id="game"><div id="hd"><button class="sm" id="mu" onclick="mute()">🔊</button><div id="st"></div><span id="ck"></span></div>
+ <div class="pr" id="top"></div><div id="bd"><div id="ct"></div></div><div class="pr" id="bot"></div>
+ <button class="bk" onclick="$('md').classList.add('on')">≡</button></div>
+<div id="md" class="md"><div class="mb"><p data-i="exitq"></p><div class="row"><button class="gb" style="font-size:20px;padding:6px 16px" onclick="exitG()"><span data-i="yes"></span></button><button class="gb" style="font-size:20px;padding:6px 16px" onclick="$('md').classList.remove('on')"><span data-i="no"></span></button></div></div></div>
+<div id="rs"><div class="rp"><svg class="logo" viewBox="0 0 300 210"><use href="#logo"/></svg><div class="cg" data-i="cg"></div><div class="rbx"><div id="rrows"></div><div class="wl"><div><b data-i="wn"></b><span id="rw">0</span></div><div><b data-i="ls"></b><span id="rl">0</span></div></div><div class="rbt"><button onclick="exitG()">🏠</button><button onclick="share()">🔗</button><button id="rep" class="gr" onclick="replay()">▶</button></div></div></div></div>
+</div>
+<canvas id="fx"></canvas>
+<script src="js/config.js"></script>
+<script src="js/game.js"></script>
+</body></html>
