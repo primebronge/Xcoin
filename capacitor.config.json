@@ -1,0 +1,9 @@
+{
+  "appId": "com.pb.ludoking",
+  "appName": "Ludo King",
+  "webDir": "www",
+  "backgroundColor": "#245489",
+  "android": {
+    "allowMixedContent": false
+  }
+}
