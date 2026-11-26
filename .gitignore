@@ -1,0 +1,9 @@
+# Android / Gradle
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+*.iml
+.idea/
+.DS_Store
+# NOTE: android/keystore/ludoking.jks ke ignore korba na - oita lage (sobsomoy ekoi key e sign korar jonno)
