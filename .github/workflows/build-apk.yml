@@ -1,0 +1,63 @@
+name: Build Ludo King APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.7'
+
+      - name: Read game version from README.md
+        id: ver
+        run: |
+          V=$(grep -E '^##.*\(v[0-9]+\)' README.md | grep -oE '\(v[0-9]+\)' | grep -oE '[0-9]+' | sort -n | tail -1)
+          V=${V:-13}
+          echo "num=$V" >> "$GITHUB_OUTPUT"
+          echo "Game version: $V"
+
+      - name: Build release APK
+        working-directory: android
+        run: gradle assembleRelease --no-daemon --stacktrace
+
+      - name: Collect APK
+        run: |
+          mkdir -p dist
+          cp android/app/build/outputs/apk/release/app-release.apk dist/LudoKing.apk
+          ls -la dist
+
+      - name: Upload APK (Actions artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: LudoKing-v${{ steps.ver.outputs.num }}-apk
+          path: dist/LudoKing.apk
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.ver.outputs.num }}
+          name: Ludo King v${{ steps.ver.outputs.num }}
+          body: Ludo King APK (version ${{ steps.ver.outputs.num }})
+          files: dist/LudoKing.apk
+          target_commitish: ${{ github.sha }}
