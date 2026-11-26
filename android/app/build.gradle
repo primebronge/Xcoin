@@ -1,0 +1,86 @@
+plugins {
+    id 'com.android.application'
+}
+
+// ---- Game version: ../README.md er sob "(vN)" heading er shorbochcho N (ekhon latest = v13) ----
+// README te notun "## Notun (v14)" lekhle APK version o automatic 14 hoye jabe.
+def gameVersion = {
+    int best = 0
+    try {
+        def readme = new File(rootDir.parentFile, 'README.md')
+        readme.eachLine('UTF-8') { String line ->
+            def m = (line =~ /^##\s.*\(v(\d+)\)/)
+            if (m.find()) {
+                best = Math.max(best, m.group(1).toInteger())
+            }
+        }
+    } catch (Exception ignored) {
+    }
+    return best > 0 ? best : 13
+}()
+
+android {
+    namespace 'com.pb.ludoking'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.pb.ludoking'
+        minSdk 21
+        targetSdk 34
+        versionCode gameVersion
+        versionName gameVersion.toString()
+    }
+
+    // Sobsomoy ekoi key diye sign hoy, tai notun APK purono app er upor update hishebe install hoy.
+    signingConfigs {
+        release {
+            storeFile file("$rootDir/keystore/ludoking.jks")
+            storeType 'pkcs12'
+            storePassword 'PbLudoKing2026'
+            keyAlias 'ludoking'
+            keyPassword 'PbLudoKing2026'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lint {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+            // Game (HTML/JS) repo er root theke copy hoye ekhane ashe
+            assets.srcDir("$buildDir/generated/web")
+        }
+    }
+}
+
+// Repo root er game file (index.html, css, js, lib, assets) -> APK assets/www. admin.html, README, apk.txt APK te jay na.
+tasks.register('copyWeb', Copy) {
+    from(rootDir.parentFile) {
+        include 'index.html', 'css/**', 'js/**', 'lib/**', 'assets/**'
+        exclude '**/README.txt'
+    }
+    into "$buildDir/generated/web/www"
+}
+tasks.named('preBuild') {
+    dependsOn tasks.named('copyWeb')
+}
+
+dependencies {
+    implementation 'androidx.core:core:1.12.0'
+    implementation 'androidx.webkit:webkit:1.10.0'
+}
