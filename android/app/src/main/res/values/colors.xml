@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="game_bg">#0A2A55</color>
+    <color name="status_bar">#0A2A55</color>
+</resources>

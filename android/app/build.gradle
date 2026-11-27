@@ -1,0 +1,75 @@
+plugins {
+    id 'com.android.application'
+}
+
+// ---------------------------------------------------------------------------
+// App version comes from ONE place: www/js/version.js   ->   const APP_VERSION='14';
+//   "14"    -> versionName 14    , versionCode 14000   (OB / major update)
+//   "14.1"  -> versionName 14.1  , versionCode 14001   (patch update)
+// ---------------------------------------------------------------------------
+def versionJs = file('../../www/js/version.js')
+def vMatch = (versionJs.text =~ /APP_VERSION\s*=\s*['"]([0-9]+(?:\.[0-9]+)*)['"]/)
+if (!vMatch.find()) {
+    throw new GradleException("APP_VERSION not found in www/js/version.js")
+}
+def appVersion = vMatch.group(1)
+def vParts = appVersion.tokenize('.')
+def vMajor = vParts[0] as int
+def vMinor = vParts.size() > 1 ? (vParts[1] as int) : 0
+def appVersionCode = vMajor * 1000 + vMinor
+
+android {
+    namespace 'com.pb.ludoking'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'com.pb.ludoking'
+        minSdk 24
+        targetSdk 34
+        versionCode appVersionCode
+        versionName appVersion
+    }
+
+    signingConfigs {
+        release {
+            // Same key every build => a new APK can install over the old one (needed for in-app update).
+            // To use your own key: set these 4 env vars (GitHub secrets) and replace ludoking.jks.
+            storeFile file('ludoking.jks')
+            storeType 'pkcs12'
+            storePassword System.getenv('KEYSTORE_PASSWORD') ?: 'ludoking-2026'
+            keyAlias System.getenv('KEY_ALIAS') ?: 'ludoking'
+            keyPassword System.getenv('KEY_PASSWORD') ?: 'ludoking-2026'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    // The whole game lives in /www (repo root). Its files become the APK "assets":
+    //   www/index.html -> assets/index.html , www/assets/img/.. -> assets/assets/img/..
+    sourceSets {
+        main {
+            assets.srcDirs = ['../../www']
+        }
+    }
+
+    // mp4 must stay uncompressed so the intro video can be played straight from the APK
+    androidResources {
+        noCompress 'mp4', 'mp3'
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.11.0'
+    implementation 'androidx.core:core:1.13.1'
+}

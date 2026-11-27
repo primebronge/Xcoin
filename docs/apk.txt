@@ -1,0 +1,14 @@
+(jokhon bolbo apk.txt onujayi kaj korte tokhon sudhu korbe tar age apk.txt te ki lekha ase kono kisu korba na)
+
+amar ei full project ta apk banabo github diye tai project ta redy kore dao. game tar version "README.md" eta read kore latest change a dekho version dewa ase. ar game tay update system korba jate firebase diye direct update pathano jay, firebase a update and version stucture kivabe sajano ase tar png dewa ase "assets/img/firebase.png".  jodi player offline a game a dhoke taile check korar dorkar nai, but jodi player online a game a dhoke taile firebase theke version check dibe diye jodi app old version thake taile update popup asbe jodi update day taile download suru hoye jabe download hoye gele direct install er permmition caibe permmiton diye update kore felbe direct. ar update ta hobe amon je v13 v14 esob hosse OB update mane dhoro ami v13 use kori tokhon jodi v14 ase taile update dewa baddhota mulok naile app use kora jabe na, ar jodi dhoro v13 use kori v13.1/v13.2 amon update ase taile ota patch update ota dileo cole na dileo cole later diye khelte parbe but ob update asle later option thakbe na. ar dhoro online thaka obostay game a dhuklo tokhon ob update aslo tar por jodi back kore offline a abar dhoke tao dhukte parbe na popup asbe update korar internet on kore update diye dhukte hobe. firebase er full address "js/firebase-config.js" ei path a ase. admin.html ta delete kore diba jate keo access korte na pare.
+
+apk details:
+	1. Apk name "Ludo King"
+	2. Apk logo "assets/img/icon.png"
+	3. Apk package name "com.pb.ludoking"
+	4. Apk Intro "assets/ui/pb_intro.mp4" (eta apk te dhokar sathe sathe play hobe, intro ses hole index.html run hobe. intro ta full screen a play hobe but index.html ta status bar thakbe and notch er niche hobe)
+
+apk settings:
+	1. Always on display (game dhukle display always on thakbe sleep mode a jabe na)
+	2. Apk te status bar showen thakbe and full screen korar dorkar nai notch er jayga thakbe.
+	3. Jehetu eta game tai game er moto setup korba jate 2 bar home a click korle taile back hobe.
