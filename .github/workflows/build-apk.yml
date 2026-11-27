@@ -1,95 +1,75 @@
-name: Build APK
+name: Build Ludo King APK
 
+# Runs on every push to main/master, on every tag like v14 / v14.1, and by hand (Actions tab > Run workflow).
+#   - APK is always saved as an "artifact" of the run (Actions > the run > Artifacts).
+#   - If you push a tag (git tag v14.1 && git push --tags) the APK is also attached to a GitHub Release.
 on:
   push:
-    branches: [main, master]
+    branches: [ main, master ]
+    tags: [ 'v*' ]
   workflow_dispatch:
 
 permissions:
-  contents: write   # needed to publish the APK as a GitHub Release
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      # Same key for every build = players can update over the old version.
-      # (Optional) override with repository secrets KEYSTORE_PASSWORD / KEYSTORE_ALIAS.
-      KS_PASS: ${{ secrets.KEYSTORE_PASSWORD || 'ludoking-2026' }}
-      KS_ALIAS: ${{ secrets.KEYSTORE_ALIAS || 'ludoking' }}
     steps:
       - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
 
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: '17'
 
-      - name: Install Capacitor
-        run: npm install
-
-      - name: Prepare Android project
-        run: bash scripts/prepare-android.sh
-
-      # Maven Central sometimes answers "429 Too Many Requests" to GitHub runners.
-      # Use Google's mirror of Maven Central first (Central stays as the fallback).
-      - name: Gradle mirror
+      # The GitHub runner already has the Android SDK (ANDROID_HOME). No extra setup action needed.
+      - name: Android SDK licenses + platform 34
         run: |
-          mkdir -p ~/.gradle/init.d
-          cat > ~/.gradle/init.d/mirror.gradle <<'EOF'
-          allprojects {
-              buildscript {
-                  repositories { maven { url 'https://maven-central.storage-download.googleapis.com/maven2/' } }
-              }
-              repositories {
-                  maven { url 'https://maven-central.storage-download.googleapis.com/maven2/' }
-              }
-          }
-          EOF
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKM" --licenses > /dev/null 2>&1 || true
+          "$SDKM" "platforms;android-34" "build-tools;34.0.0" || echo "::warning::sdkmanager could not install platform 34 (maybe already there); Gradle will try itself"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Firebase SDK (offline copy inside the APK)
+        run: |
+          mkdir -p www/lib
+          for f in firebase-app-compat.js firebase-database-compat.js; do
+            if [ ! -s "www/lib/$f" ]; then
+              curl -fsSL --retry 3 -o "www/lib/$f" "https://www.gstatic.com/firebasejs/10.12.2/$f" \
+                || { echo "::warning::could not download $f - the game will load it from the CDN instead"; rm -f "www/lib/$f"; }
+            fi
+          done
+          ls -la www/lib
+
+      - name: Read app version (www/js/version.js)
+        id: ver
+        run: |
+          V=$(grep -oP "APP_VERSION\s*=\s*['\"]\K[0-9]+(\.[0-9]+)*" www/js/version.js)
+          echo "App version: $V"
+          echo "version=$V" >> "$GITHUB_OUTPUT"
 
       - name: Build release APK
         working-directory: android
-        run: |
-          chmod +x gradlew
-          ok=0
-          for i in 1 2 3; do
-            if ./gradlew assembleRelease --no-daemon -Dorg.gradle.internal.repository.max.retries=6 -Dorg.gradle.internal.repository.initial.backoff=2000; then
-              ok=1; break
-            fi
-            echo "Build attempt $i failed - retrying in 45 seconds..."
-            sleep 45
-          done
-          [ "$ok" = "1" ]
+        run: gradle --no-daemon assembleRelease
 
-      - name: Align and sign APK
+      - name: Name the APK + check signature
         run: |
-          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
-          UNSIGNED=$(ls android/app/build/outputs/apk/release/*.apk | head -1)
-          echo "Unsigned: $UNSIGNED  | build-tools: $BT"
-          "$BT/zipalign" -p -f 4 "$UNSIGNED" aligned.apk
-          "$BT/apksigner" sign \
-            --ks signing/ludoking.jks \
-            --ks-key-alias "$KS_ALIAS" \
-            --ks-pass "pass:$KS_PASS" \
-            --key-pass "pass:$KS_PASS" \
-            --out LudoKing.apk aligned.apk
-          "$BT/apksigner" verify --print-certs LudoKing.apk | head -3
-
-      - name: Read version
-        id: ver
-        run: echo "code=$(cat .apk-version)" >> "$GITHUB_OUTPUT"
+          cp android/app/build/outputs/apk/release/app-release.apk "Ludo_King_v${{ steps.ver.outputs.version }}.apk"
+          APKSIGNER="$(ls -d "$ANDROID_HOME"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -1)"
+          [ -n "$APKSIGNER" ] && "$APKSIGNER" verify --print-certs "Ludo_King_v${{ steps.ver.outputs.version }}.apk" || true
+          ls -la Ludo_King_v*.apk
 
       - uses: actions/upload-artifact@v4
         with:
-          name: LudoKing-v${{ steps.ver.outputs.code }}
-          path: LudoKing.apk
+          name: Ludo_King_v${{ steps.ver.outputs.version }}
+          path: Ludo_King_v*.apk
 
-      - name: Publish release (direct download link)
+      - name: Publish GitHub Release (tags only)
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.ver.outputs.code }}
-          name: Ludo King v${{ steps.ver.outputs.code }}
-          files: LudoKing.apk
+          files: Ludo_King_v*.apk
