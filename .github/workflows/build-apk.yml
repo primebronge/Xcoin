@@ -1,0 +1,71 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # needed to publish the APK as a GitHub Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Same key for every build = players can update over the old version.
+      # (Optional) override with repository secrets KEYSTORE_PASSWORD / KEYSTORE_ALIAS.
+      KS_PASS: ${{ secrets.KEYSTORE_PASSWORD || 'ludoking-2026' }}
+      KS_ALIAS: ${{ secrets.KEYSTORE_ALIAS || 'ludoking' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Install Capacitor
+        run: npm install
+
+      - name: Prepare Android project
+        run: bash scripts/prepare-android.sh
+
+      - name: Build release APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
+
+      - name: Align and sign APK
+        run: |
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          UNSIGNED=$(ls android/app/build/outputs/apk/release/*.apk | head -1)
+          echo "Unsigned: $UNSIGNED  | build-tools: $BT"
+          "$BT/zipalign" -p -f 4 "$UNSIGNED" aligned.apk
+          "$BT/apksigner" sign \
+            --ks signing/ludoking.jks \
+            --ks-key-alias "$KS_ALIAS" \
+            --ks-pass "pass:$KS_PASS" \
+            --key-pass "pass:$KS_PASS" \
+            --out LudoKing.apk aligned.apk
+          "$BT/apksigner" verify --print-certs LudoKing.apk | head -3
+
+      - name: Read version
+        id: ver
+        run: echo "code=$(cat .apk-version)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LudoKing-v${{ steps.ver.outputs.code }}
+          path: LudoKing.apk
+
+      - name: Publish release (direct download link)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.ver.outputs.code }}
+          name: Ludo King v${{ steps.ver.outputs.code }}
+          files: LudoKing.apk
