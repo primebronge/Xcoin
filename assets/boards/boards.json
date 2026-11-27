@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "default": "classic",
+  "boards": [
+    { "id": "classic",      "name": "Classic",      "file": "classic.png" },
+    { "id": "jungle",       "name": "Jungle",       "file": "jungle.png" },
+    { "id": "solar_system", "name": "Solar System", "file": "solar_system.png", "cover": "dark" },
+    { "id": "heaven",       "name": "Heaven",       "file": "heaven.png" },
+    { "id": "nether",       "name": "Nether",       "file": "nether.png",       "cover": "dark" }
+  ]
+}

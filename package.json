@@ -1,0 +1,11 @@
+{
+  "name": "ludo-king",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ludo King - Capacitor wrapper that builds the game into an Android APK",
+  "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/core": "^6.2.0"
+  }
+}
