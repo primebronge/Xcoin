@@ -34,11 +34,35 @@ jobs:
       - name: Prepare Android project
         run: bash scripts/prepare-android.sh
 
+      # Maven Central sometimes answers "429 Too Many Requests" to GitHub runners.
+      # Use Google's mirror of Maven Central first (Central stays as the fallback).
+      - name: Gradle mirror
+        run: |
+          mkdir -p ~/.gradle/init.d
+          cat > ~/.gradle/init.d/mirror.gradle <<'EOF'
+          allprojects {
+              buildscript {
+                  repositories { maven { url 'https://maven-central.storage-download.googleapis.com/maven2/' } }
+              }
+              repositories {
+                  maven { url 'https://maven-central.storage-download.googleapis.com/maven2/' }
+              }
+          }
+          EOF
+
       - name: Build release APK
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew assembleRelease --no-daemon
+          ok=0
+          for i in 1 2 3; do
+            if ./gradlew assembleRelease --no-daemon -Dorg.gradle.internal.repository.max.retries=6 -Dorg.gradle.internal.repository.initial.backoff=2000; then
+              ok=1; break
+            fi
+            echo "Build attempt $i failed - retrying in 45 seconds..."
+            sleep 45
+          done
+          [ "$ok" = "1" ]
 
       - name: Align and sign APK
         run: |
