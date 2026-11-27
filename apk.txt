@@ -1,6 +1,0 @@
-(jokhon bolbo apk.txt onujayi kaj korte tokhon sudhu korbe tar age apk.txt te ki lekha ase kono kisu korba na)
-
-amar ei full project ta apk banabo github diye tai project ta redy kore dao. name diba "Ludo King". game er logo "assets/img/icon.png". game er package name "com.pb.ludoking". game tar version "README.md" eta read kore latest change a dekho version dewa ase. ar game tay update system korba jate firebase diye direct update pathano jay, firebase a update and version stucture kivabe sajano ase tar png dewa ase "assets/img/firebase.png".  jodi player offline a game a dhoke taile check korar dorkar nai, but jodi player online a game a dhoke taile firebase theke version check dibe diye jodi app old version thake taile update popup asbe jodi update day taile download suru hoye jabe download hoye gele direct install er permmition caibe permmiton diye update kore felbe direct. firebase er full address "js/firebase-config.js" ei path a ase. admin.html ta delete kore diba jate keo access korte na pare.
-
-apk settings:
-	1. Always on display (game dhukle display always on thakbe sleep mode a jabe na)
